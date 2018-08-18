@@ -7,6 +7,7 @@ import guru.springfamework.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,25 +26,33 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository
                 .findAll()
                 .stream()
-                .map(customer -> {
-                    CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
-                    customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
-                    return customerDTO;
-                })
+                .map(customerToCustomerDto())
                 .collect(Collectors.toList());
     }
 
     @Override
     public CustomerDTO getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .map(customerMapper::customerToCustomerDto)
+                .map(customerToCustomerDto())
                 .orElseThrow(RuntimeException::new); // TODO: Implement better exception handling
     }
 
     @Override
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
 
+        return saveAndReturnDTO(customerMapper.customerDtoToCustomer(customerDTO));
+    }
+
+    @Override
+    public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+
         Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+        customer.setId(id);
+
+        return saveAndReturnDTO(customer);
+    }
+
+    private CustomerDTO saveAndReturnDTO(Customer customer) {
 
         Customer savedCustomer = customerRepository.save(customer);
 
@@ -52,5 +61,13 @@ public class CustomerServiceImpl implements CustomerService {
         returnDto.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
 
         return returnDto;
+    }
+
+    private Function<Customer, CustomerDTO> customerToCustomerDto() {
+        return customer -> {
+            CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
+            customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
+            return customerDTO;
+        };
     }
 }

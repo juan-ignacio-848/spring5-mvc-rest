@@ -44,4 +44,5 @@ public class CustomerMapperTest {
         assertEquals(FIRSTNAME, customer.getFirstname());
         assertEquals(LASTNAME, customer.getLastname());
     }
+
 }

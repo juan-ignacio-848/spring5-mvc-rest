@@ -37,6 +37,8 @@ public class Bootstrap implements CommandLineRunner {
 
         customerRepository.save(susanTanner);
         customerRepository.save(titoValentino);
+
+        System.out.println("Customer Data loaded = " + customerRepository.count());
     }
 
     private void loadCategories() {
