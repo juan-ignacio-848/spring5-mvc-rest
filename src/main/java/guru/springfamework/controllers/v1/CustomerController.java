@@ -26,9 +26,7 @@ public class CustomerController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CustomerListDTO getListofCustomers(){
-
         return new CustomerListDTO(customerService.getAllCustomers());
-
     }
 
     @GetMapping({"/{id}"})
@@ -59,7 +57,6 @@ public class CustomerController {
     @DeleteMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public void deleteCustomer(@PathVariable Long id){
-
         customerService.deleteCustomerById(id);
     }
 }
