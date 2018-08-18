@@ -4,7 +4,7 @@ import guru.springfamework.api.v1.model.CategoryDTO;
 import guru.springfamework.domain.Category;
 import org.junit.Test;
 
-import static org.junit.Assert.*;I
+import static org.junit.Assert.*;
 
 public class CategoryMapperTest {
 
